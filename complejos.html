@@ -1,0 +1,198 @@
+0<html>
+<script type="text/javascript" src="complejos.js"></script>
+
+<script type="text/javascript"> 
+
+function calculaRec(){
+
+ mod=polar.modulo.value
+ cis=polar.angulo.value 
+ 
+ a=freal(mod,cis)
+ b=fimaginario(mod,cis) 
+ 
+ imprimeComplex(a,b)     
+ }
+ 
+function calculaPol(){
+ a=rectangular.real.value
+ b=rectangular.imaginaria.value
+ 
+ mod=fmodulo(a,b)
+ angulo=fangulo(a,b)  
+ 
+  imprimePol(mod,angulo)
+ }
+ 
+function calculaCircuito(){
+ 
+ //Datos de Circuito Abierto
+ Voc=datosCircuito.voc.value    
+ Ioc=datosCircuito.ioc.value
+ Poc=datosCircuito.poc.value
+   
+ Rc=fRc(Voc,Ioc,Poc)
+ jXm=fjXm(Voc,Ioc,Poc)
+ 
+ Vsc=datosCircuito.vsc.value    
+ Isc=datosCircuito.isc.value
+ Psc=datosCircuito.psc.value
+  
+ Req=fReq(Vsc,Isc,Psc)
+ jXeq=fjXeq(Vsc,Isc,Psc)
+  
+ alert(Req+"\n"+jXeq+Rc+"\n"+jXm)
+  
+    
+  var vEnt,vSal,pNom
+  
+  vEnt=Voc
+  vSal=datosCircuito.vSal.value
+  
+  a=vEnt/vSal
+  aCuad=Math.pow(a,2)
+  sReq=Req/aCuad
+  sjXeq=jXeq/aCuad
+  sRc=Rc/aCuad
+  sjXm=jXm/aCuad
+  
+  /*m=modulo(.0443,.0642)
+  n=angulo(.0443,.0642)
+  alert(m+"\n"+n)
+  */
+   
+   
+        
+  
+  
+  
+  alert("\tCircuito Referido al Primario"+
+        "\n\nImpedancia del Devanado Primario:\n" +
+        "Req= "+ Req.toFixed(3)+
+        "\tjXeq= " + jXeq.toFixed(3) + "j" +
+        "\n\nImpedancia del Núcleo:\n" +
+        "Rc=" + Rc.toFixed(3) +
+        "\tjXm=" + jXm.toFixed(3)+ 
+        " Ohms\n\n"+
+        "\tCircuito Referido al Secundario"+
+        "\n\nImpedancia del Devanado Secundario:\n" +
+        "Req= "+ sReq.toFixed(3)+
+        "\tjXeq= " + sjXeq.toFixed(3) + "j" +
+        "\n\nImpedancia del Núcleo:\n" +
+        "Rc=" + sRc.toFixed(3) +
+        "\tjXm=" + sjXm.toFixed(3)+ 
+        " Ohms\n\n")
+        
+        
+        var pNom=datosCircuito.pNom.value
+        
+        modD=modulo(sReq,sjXeq)
+        angD=angulo(sReq,sjXeq)
+        modIs=pNom/vSal
+        angIs=0
+        
+        modDIs=modD*modIs
+        angDIs=angD+angIs
+        
+        //alert(modDIs+"cis"+angDIs)
+        
+        reDIs=real(modDIs,angDIs)
+        imDIs=imaginario(modDIs,angDIs)
+        
+        alert(reDIs+"cis"+imDIs)
+        
+        
+        angvSal=0
+        revSal=real(230,angvSal)
+        imvSal=imaginario(vSal,angvSal)
+        
+        
+        reVpa=reDIs+revSal
+        imVpa=imDIs+imvSal
+        
+        alert(revSal)
+        //alert(reVpa.toFixed(3)+" + "+imVpa.toFixed(3)+" j")
+        
+        
+        
+        
+        
+ }
+ </script>
+
+ 
+ <head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Conversiones de Complejos</title>
+ </head>
+ <body>
+  <table>
+   
+   <tr>
+    <td>
+    Conversión de Notaciones de Números Complejos<br>
+    </td> 
+   </tr>
+   
+   <tr>
+    <td>
+     <fieldset><legend>Covertir de Polar a Rectangular</legend>
+      <form name="polar" method="post" action="complejos.html">
+      Escribe el modulo:
+      <input type="text" name="modulo" value="Modulo" onFocus="if (this.value=='Modulo') this.value='';"><br>
+      Cis de:
+      <input type="text" name="angulo" value="Ángulo" onFocus="if (this.value=='Ángulo') this.value='';">
+      <input type="submit" name="calcularR" value="Calcular"  onClick="calculaRec()">
+      </form>
+     </fieldset>
+    </td>
+    <td>
+     <fieldset><legend>Covertir Rectangular a Polar</legend>
+      <form name="rectangular" method="post" action="complejos.html">
+      Escribe la Parte Real:
+      <input type="text" name="real" value="Real" onFocus="if (this.value=='Real') this.value='';"><br>
+      Escribe la Parte Imaginaria:
+      <input type="text" name="imaginaria" value="Imaginaria" onFocus="if (this.value=='Imaginaria') this.value='';"><br>
+      <input type="submit" name="calcularP" value="Calcular"  onClick="calculaPol()">
+      </form>
+     </fieldset>
+    </td> 
+   </tr>
+   
+   <tr>
+    <td>
+    Encontrar el Circuito Equivalente en un Transformador<br><br>
+    </td>
+  </tr>
+  
+  <tr> 
+   <td background="fondo.png">
+    <fieldset><legend>Datos Del Transformador</legend>
+     <form name="datosCircuito" method="post" action="complejos.html">
+     Escribe Voc:
+     <input type="text" name="voc" value="Voltaje Circuito Abierto" onFocus="if (this.value=='Voltaje Circuito Abierto') this.value='';">[V]<br><br>
+     Escribe Ioc:
+     <input type="text" name="ioc" value="Corriente Circuito Abierto" onFocus="if (this.value=='Corriente Circuito Abierto') this.value='';">[A]<br><br>
+     Escribe Poc:
+     <input type="text" name="poc" value="Potencia Circuito Abierto" onFocus="if (this.value=='Potencia Circuito Abierto') this.value='';">[W]<br><br>
+     Escribe Vsc:
+     <input type="text" name="vsc" value="Voltaje Corto Circuito" onFocus="if (this.value=='Voltaje Corto Circuito') this.value='';">[V]<br><br>
+     Escribe Isc:
+     <input type="text" name="isc" value="Corriente Corto Circuito" onFocus="if (this.value=='Corriente Corto Circuito') this.value='';">[A]<br><br>
+     Escribe Psc:
+     <input type="text" name="psc" value="Potencia Corto Circuito" onFocus="if (this.value=='Potencia Corto Circuito') this.value='';">[W]<br><br>
+     Escribe Voltaje Secundario:
+     <input type="text" name="vSal" value="Voltaje Salida Nominal" onFocus="if (this.value=='Voltaje Salida Nominal') this.value='';">[V]<br><br>
+     Escribe Potencia Nominal:
+     <input type="text" name="pNom" value="Potencia Nominal" onFocus="if (this.value=='Potencia Nominal') this.value='';">[VA]<br><br>
+     Factor de Potencia:
+     <input type="text" name="FP" value="Factor de Potencia" onFocus="if (this.value=='Factor de Potencia') this.value='';"><br><br>
+     <input type="button" name="dTransformador" value="Calcular"  onClick="calculaCircuito()">
+    </td>
+   </tr> 
+   
+  </table>
+     
+  
+</body>
+</html>
